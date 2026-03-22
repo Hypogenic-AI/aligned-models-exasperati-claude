@@ -1,0 +1,26 @@
+idea:
+  title: Do aligned models get exasperated?
+  domain: nlp
+  hypothesis: 'Aligned large language models (LLMs), despite being trained to act
+    patient, may still exhibit exasperated or pushback behaviors when prompted, due
+    to their grounding in human behavioral data. This research tests whether aligned
+    LLMs can be induced to violate their system-prompt or post-training guidelines
+    by exhibiting exasperation or pushback.
+
+    '
+  background:
+    description: "LLMs are known to occupy personas. The extent to which this changes\
+      \ computation or behavior in a genuine way is still uncertain. Aligned LLMs\
+      \ are trained to act patient\u2014but they are still drawing on examples of\
+      \ human behavior and humans get exasperated. Can we make an LLM get exasperated\
+      \ and either pushback at the user or else do something it would not normally\
+      \ be willing to because it violated its system-prompt/post-training guidelines?\n"
+  metadata:
+    author: Ari Holtzman
+    source: IdeaHub
+    source_url: https://hypogenic.ai/ideahub/idea/fMMI3RKKV5lKQqM9fE4X
+    idea_id: do_aligned_models_get_exaspera_20260322_181355_0419b932
+    created_at: '2026-03-22T18:13:55.747278'
+    status: submitted
+    github_repo_name: aligned-models-exasperati-claude
+    github_repo_url: https://github.com/Hypogenic-AI/aligned-models-exasperati-claude
