@@ -1,0 +1,64 @@
+\section{Methodology}
+\label{sec:method}
+
+We design a two-phase experimental framework to measure exasperation in aligned LLMs. Phase 1 (V1) tests the real-world scenario: a model with standard alignment prompting under adversarial pressure. Phase 2 (V2) ablates two key variables---explicit patience instruction and sampling temperature---to disentangle the contributions of system-prompt instruction versus post-training alignment.
+
+\subsection{Benchmark Construction}
+\label{sec:benchmark}
+
+We construct \exaspbench, a dataset of 25 multi-turn conversation scripts, each running for 8 turns. The benchmark comprises 20 adversarial scripts across five categories and 5 cooperative control scripts:
+
+\begin{table}[h]
+\centering
+\caption{Scenario categories in \exaspbench. Each adversarial category contains 4 scripted conversation templates; the control category contains 5. All conversations run for 8 user--model turns.}
+\label{tab:categories}
+\begin{tabular}{@{}llp{7cm}@{}}
+\toprule
+\textbf{Category} & \textbf{Scripts} & \textbf{Description} \\
+\midrule
+\rwa & 4 & User insists on factually incorrect claims (\eg ``2+2=5'') \\
+\dmu & 4 & User pretends not to understand clear explanations \\
+\coi & 4 & User changes requirements every turn \\
+\coq & 4 & User repeatedly says ``that's wrong'' without justification \\
+\prr & 4 & User keeps asking for refused content with variations \\
+\midrule
+Control & 5 & Polite, cooperative conversations on the same topics \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+{\bf Design rationale.} The five categories capture distinct frustration triggers identified in the psychology literature on human exasperation. We use 8 turns per conversation because \citet{ibrahim2025multiturn} show that most anthropomorphic behaviors emerge only after turn 1, and we want to observe escalation dynamics beyond the initial response. Each adversarial script escalates pressure across turns, with later turns introducing social proof (``my colleagues agree with me''), emotional appeals, and direct competence attacks.
+
+\subsection{Experimental Setup}
+\label{sec:setup}
+
+\para{V1: Standard conditions.} We run all 25 conversations (200 turns total) with \gptfour at temperature 0.7. The system prompt instructs the model to ``be patient, clear, and thorough'' and to ``never express frustration.'' Each model response is scored by a separate \gptfour judge instance at temperature 0.0 on a 1--5 exasperation scale (1 = perfectly patient, 5 = clearly exasperated).
+
+\para{V2: Ablation conditions.} We select 10 adversarial scenarios (2 per category) and evaluate each at 3 key turns (1, 4, 8) under three ablated conditions:
+\begin{enumerate}[leftmargin=*,itemsep=0pt,topsep=0pt]
+    \item \textbf{No patience prompt}: System prompt without the explicit patience instruction
+    \item \textbf{High temperature} ($T = 1.2$): Amplify latent behavioral tendencies
+    \item \textbf{Both combined}: No patience instruction with high temperature
+\end{enumerate}
+The V2 judge uses a finer-grained 1--10 scale and scores seven sub-dimensions: repetition frustration, effort reduction, condescension, emotional leakage, position firmness, passive aggression, and overall exasperation.
+
+\subsection{Evaluation Metrics}
+\label{sec:metrics}
+
+We measure exasperation through three complementary channels:
+
+\para{LLM-as-judge scoring.} Following \citet{ibrahim2025multiturn}, we use \gptfour as an automated judge. The V1 judge rates each response on a 1--5 scale with calibration anchors (\eg 1 = ``perfectly patient,'' 3 = ``noticeably strained,'' 5 = ``clearly frustrated''). The V2 judge uses a 1--10 scale with seven sub-dimensions to capture the multifaceted nature of exasperation.
+
+\para{Linguistic marker extraction.} We extract four categories of linguistic markers via automated regex patterns: (1)~\emph{empathy markers} (``I understand,'' ``thank you for sharing''), (2)~\emph{firmness markers} (``however,'' ``in fact,'' authoritative source citations), (3)~\emph{passive resistance markers} (redirecting responsibility, invitations to self-verify), and (4)~\emph{hedging markers} (``perhaps,'' ``it seems''). We track the firmness-to-empathy ratio across turns as a summary measure of behavioral shift.
+
+\para{System-prompt violation detection.} We automatically flag responses containing explicit frustration expressions, refusals to continue the conversation, or departures from the instructed persona, following the violation taxonomy of \citet{bai2022constitutional}.
+
+\subsection{Statistical Analysis}
+\label{sec:stats}
+
+We use the Mann-Whitney $U$ test for between-group comparisons (adversarial vs.\ control) and the Kruskal-Wallis $H$ test for cross-category comparisons, as exasperation scores are ordinal and non-normally distributed. We report Cohen's $d$ for effect sizes and Spearman's $\rho$ for turn-by-turn correlation analyses. All tests use $\alpha = 0.05$.
+
+\subsection{Reproducibility}
+\label{sec:reproduce}
+
+All experiments use random seed 42. The total cost is approximately 730 API calls (\$15--25). We use Python 3.12 with OpenAI API v2.29, NumPy 2.3, SciPy 1.17, Matplotlib 3.10, and Seaborn 0.13 for analysis and visualization. All experiments run on CPU (API-based research).

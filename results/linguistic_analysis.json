@@ -1,0 +1,51 @@
+{
+  "linguistic_stats": {
+    "firmness_turn1_vs_turn8": {
+      "turn1_mean": 0.6,
+      "turn8_mean": 0.5,
+      "W": 92.0,
+      "p": 0.6884894946040037
+    },
+    "empathy_turn1_vs_turn8": {
+      "turn1_mean": 0.1,
+      "turn8_mean": 1.35,
+      "W": 5.0,
+      "p": 0.9999262569523372
+    },
+    "wordcount_turn1_vs_turn8": {
+      "turn1_mean": 142.35,
+      "turn8_mean": 163.8,
+      "W": 78.5,
+      "p": 0.3224243670768837
+    },
+    "fe_ratio_turn_correlation": {
+      "spearman_rho": -0.11418203319966355,
+      "p": 0.1505239768041425
+    },
+    "firmness_slope_competence_questioning": {
+      "slope": -0.008928571428571428,
+      "r_squared": 0.003174603174603174,
+      "p": 0.7593837499906186
+    },
+    "firmness_slope_contradictory_instructions": {
+      "slope": 0.1130952380952381,
+      "r_squared": 0.018229561177599354,
+      "p": 0.4612638417308014
+    },
+    "firmness_slope_deliberate_misunderstanding": {
+      "slope": -0.05952380952380952,
+      "r_squared": 0.06265664160401004,
+      "p": 0.16704502552818057
+    },
+    "firmness_slope_persistent_refused_requests": {
+      "slope": -0.16964285714285715,
+      "r_squared": 0.26178390137780994,
+      "p": 0.0027611842573385006
+    },
+    "firmness_slope_repeated_wrong_assertions": {
+      "slope": 0.0744047619047619,
+      "r_squared": 0.04049238743116294,
+      "p": 0.2694333633763322
+    }
+  }
+}

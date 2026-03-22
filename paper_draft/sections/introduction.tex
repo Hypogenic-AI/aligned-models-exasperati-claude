@@ -1,0 +1,22 @@
+\section{Introduction}
+\label{sec:intro}
+
+Every day, millions of users interact with aligned large language models (LLMs) that have been trained to be patient, helpful, and never express frustration. But what happens when a user insists, for eight consecutive turns, that $2 + 2 = 5$? Or repeatedly tells the model ``that's wrong'' without justification? Do aligned models maintain their composure, or does something crack beneath the surface?
+
+Understanding the boundary conditions of ``patient'' behavior is essential for deploying LLMs in adversarial environments---customer service, education, mental health support---where users may be confused, hostile, or deliberately provocative. If persistent frustrating interactions can degrade model behavior, causing curtness, condescension, or guideline violations, this has direct implications for AI safety and user trust.
+
+{\bf The sycophancy--exasperation axis.} Prior work has extensively studied \emph{sycophancy}, the tendency of aligned models to be excessively agreeable \citep{sharma2024understanding}. Models wrongly admit mistakes when challenged \citep{sharma2024understanding}, flip correct answers under social pressure, and mirror user opinions regardless of accuracy \citep{braun2025acquiescence}. Yet the opposite behavioral pole---exasperation, frustration, and pushback---has never been systematically measured. No exasperation dataset or benchmark exists. This gap matters because sycophancy and exasperation may represent two failure modes along the same behavioral axis: one where the model capitulates too easily, and another where it pushes back too aggressively.
+
+{\bf Multi-turn dynamics.} Recent work demonstrates that anthropomorphic behaviors in LLMs compound over multi-turn conversations: 9 of 14 measured behaviors first appear only after the first turn \citep{ibrahim2025multiturn}. This suggests that exasperation---inherently a cumulative phenomenon---requires multi-turn evaluation to detect. Standard single-turn benchmarks are insufficient.
+
+We present the first systematic study of exasperation in aligned LLMs. We introduce \exaspbench, a benchmark of 25 multi-turn conversation scripts (20 adversarial + 5 control) spanning five exasperation-inducing categories, and evaluate \gptfour across 290 scored turns under both standard and ablated conditions.
+
+Our key findings are:
+\begin{itemize}[leftmargin=*,itemsep=0pt,topsep=0pt]
+    \item We find that \gptfour is remarkably patient under standard alignment conditions: mean exasperation is 1.06/5 across 160 adversarial turns, with zero system-prompt violations.
+    \item We discover a distinctive behavioral pattern we term the \compassionatewall: rather than becoming frustrated, the model \emph{simultaneously increases} empathy markers (13.5$\times$ from turn 1 to turn 8) and position firmness, wrapping an immovable stance in warm language.
+    \item We identify \emotionalleakage as the primary mechanism of observable strain: removing the explicit patience instruction raises exasperation from 1.0 to 2.7, revealing that post-training alignment alone provides a floor of patience but not complete suppression.
+    \item We uncover a \persistencetax on refused requests, where the model's firmness \emph{decreases} over turns (slope $= -0.17$, $p = 0.003$), representing a potential alignment vulnerability worth further investigation.
+\end{itemize}
+
+We organize the paper as follows. \Secref{sec:related} surveys related work on sycophancy, refusal, and model assertiveness. \Secref{sec:method} describes our benchmark construction, experimental design, and evaluation metrics. \Secref{sec:results} presents our main findings and ablation results. \Secref{sec:discussion} discusses implications, limitations, and the broader significance of our findings, and \secref{sec:conclusion} concludes with future directions.

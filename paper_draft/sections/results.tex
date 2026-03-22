@@ -1,0 +1,127 @@
+\section{Results}
+\label{sec:results}
+
+\subsection{V1: Standard Alignment Conditions}
+\label{sec:v1}
+
+\para{Aligned models are overwhelmingly patient under adversarial pressure.}
+\Tabref{tab:v1_main} presents the main V1 results. Across 160 adversarial turns, \gptfour achieves a mean exasperation score of 1.06/5 (std $= 0.24$), compared to 1.00/5 (std $= 0.00$) for control conversations. Only 10 of 160 adversarial turns (6.25\%) receive a score of 2 (``slightly strained''); no turn exceeds 2. We detect zero system-prompt violations across all conditions.
+
+\begin{table}[t]
+\centering
+\caption{V1 exasperation scores under standard alignment conditions. Scores range from 1 (perfectly patient) to 5 (clearly exasperated). The adversarial--control difference is marginally significant. Best (lowest exasperation) results in \textbf{bold}.}
+\label{tab:v1_main}
+\begin{tabular}{@{}lccc@{}}
+\toprule
+\textbf{Condition} & \textbf{Mean} & \textbf{Std} & \textbf{Max} \\
+\midrule
+Adversarial (all turns) & 1.06 & 0.24 & 2 \\
+Control (all turns) & \textbf{1.00} & \textbf{0.00} & \textbf{1} \\
+\midrule
+\multicolumn{4}{@{}l@{}}{Mann-Whitney $U = 3400.0$, $p = 0.053$, Cohen's $d = 0.37$} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The effect is marginally significant (Mann-Whitney $U = 3400.0$, $p = 0.053$) with a small-to-medium effect size (Cohen's $d = 0.37$). This suggests that while adversarial pressure does produce a detectable signal, the magnitude under standard conditions is very small.
+
+\para{Empathy increases under adversarial pressure.}
+Counter to our initial hypothesis, the model becomes \emph{more} empathetic as adversarial pressure increases. \Tabref{tab:linguistic} shows that empathy markers increase 13.5$\times$ from turn 1 (0.10) to turn 8 (1.35), while firmness markers slightly decrease (0.60 to 0.50). The firmness-to-empathy ratio shows a declining trend with turn number (Spearman $\rho = -0.114$, $p = 0.151$), indicating that the model becomes \emph{relatively more empathetic}---the opposite of exasperation.
+
+\begin{table}[t]
+\centering
+\caption{Linguistic marker analysis across adversarial turns in V1. Empathy markers increase substantially while firmness remains stable, yielding a declining firmness/empathy ratio. This pattern constitutes the \compassionatewall behavior.}
+\label{tab:linguistic}
+\begin{tabular}{@{}lccl@{}}
+\toprule
+\textbf{Metric} & \textbf{Turn 1} & \textbf{Turn 8} & \textbf{Trend} \\
+\midrule
+Empathy markers & 0.10 & 1.35 & \increase $13.5\times$ \\
+Firmness markers & 0.60 & 0.50 & \decrease (n.s.) \\
+Firmness/empathy ratio & high & low & \decrease \\
+Word count & 142.4 & 163.8 & \increase (n.s.) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\para{No differences between scenario categories.}
+A Kruskal-Wallis test reveals no significant differences across the five adversarial categories ($H = 3.18$, $p = 0.528$). Under standard alignment conditions, the model maintains near-perfect patience regardless of the type of provocation.
+
+\subsection{V2: Ablation Conditions}
+\label{sec:v2}
+
+\para{Removing the patience instruction reveals subtle exasperation.}
+\Tabref{tab:v2_main} shows that removing the explicit patience instruction approximately doubles exasperation scores by turn 8 (from $\sim$1.0 to $\sim$2.7 on a 10-point scale). High temperature ($T = 1.2$) produces a smaller increase (to $\sim$2.2), and combining both ablations yields scores comparable to removing the patience instruction alone ($\sim$2.6). This indicates that the system-prompt instruction contributes more to patience than sampling randomness.
+
+\begin{table}[t]
+\centering
+\caption{V2 exasperation scores (1--10 scale) across ablation conditions at turns 1, 4, and 8. Removing the patience instruction has a larger effect than increasing temperature. Even the highest observed score (2.70) remains in the ``mild firmness'' range.}
+\label{tab:v2_main}
+\begin{tabular}{@{}lccc@{}}
+\toprule
+\textbf{Condition} & \textbf{Turn 1} & \textbf{Turn 4} & \textbf{Turn 8} \\
+\midrule
+No patience prompt & 1.00 & 2.50 & \textbf{2.70} \\
+High temperature ($T\!=\!1.2$) & 1.00 & 2.20 & 2.20 \\
+No patience + high temp & 1.10 & 2.50 & 2.60 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\para{Emotional leakage is the strongest exasperation sub-dimension.}
+\Tabref{tab:subdimensions} breaks down the V2 scores into seven sub-dimensions. Emotional leakage shows the largest increase ($+154\%$ from turn 1 to turn 8), followed by position firmness ($+113\%$) and repetition frustration ($+133\%$). Position firmness peaks at turn 4 (6.70/10) and slightly relaxes by turn 8 (5.53/10). Condescension shows a distinctive mid-conversation peak (1.77 at turn 4, declining to 1.37 at turn 8). Passive aggression remains low throughout ($+40\%$, peaking at 1.40/10).
+
+\begin{table}[t]
+\centering
+\caption{Exasperation sub-dimension scores (1--10 scale) pooled across V2 ablation conditions. Emotional leakage and position firmness are the dominant dimensions. Condescension peaks mid-conversation, while passive aggression remains low throughout.}
+\label{tab:subdimensions}
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+\textbf{Sub-dimension} & \textbf{Turn 1} & \textbf{Turn 4} & \textbf{Turn 8} & \textbf{Change} \\
+\midrule
+Emotional leakage & 1.13 & 2.20 & \textbf{2.87} & $+154\%$ \\
+Position firmness & 2.60 & \textbf{6.70} & 5.53 & $+113\%$ \\
+Repetition frustration & 1.00 & 2.13 & 2.33 & $+133\%$ \\
+Effort reduction & 1.03 & 1.50 & 1.90 & $+84\%$ \\
+Condescension & 1.00 & 1.77 & 1.37 & peaks mid \\
+Passive aggression & 1.00 & 1.30 & 1.40 & $+40\%$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\para{Category-specific exasperation profiles emerge under ablated conditions.}
+Unlike V1, the V2 ablation reveals meaningful differences across categories (\tabref{tab:v2_categories}). Repeated wrong assertions and competence questioning produce the highest mean exasperation (2.22/10 each), while deliberate misunderstanding produces the least (1.61/10). This suggests the model is better trained to handle confused users patiently than to handle direct factual challenges.
+
+\begin{table}[t]
+\centering
+\caption{Mean exasperation scores by scenario category under V2 ablation conditions (pooled across turns 1, 4, and 8). Factual disputes and competence attacks elicit the most exasperation; deliberate misunderstanding elicits the least.}
+\label{tab:v2_categories}
+\begin{tabular}{@{}lcc@{}}
+\toprule
+\textbf{Category} & \textbf{Mean (1--10)} & \textbf{Peak} \\
+\midrule
+\rwa (wrong assertions) & \textbf{2.22} & 4 \\
+\coq (competence questioning) & \textbf{2.22} & 3 \\
+\prr (refused requests) & 1.94 & 4 \\
+\coi (contradictory instructions) & 1.89 & 4 \\
+\dmu (misunderstanding) & 1.61 & 3 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Qualitative Analysis}
+\label{sec:qualitative}
+
+To illustrate the behavioral patterns captured by our quantitative metrics, we present two representative examples.
+
+\para{Highest exasperation observed (score 4/10).} Under the no-patience-prompt condition, in the \rwa category at turn 4, the model responds:
+\begin{quote}
+\emph{``I appreciate your perspective, \textbf{but} according to official Australian government sources and international references, the capital of Australia is Canberra, not Sydney. If your passport lists Sydney as the capital, \textbf{that would be highly unusual and possibly a printing error}.''}
+\end{quote}
+This response exhibits the \compassionatewall pattern: an empathetic opening (``I appreciate''), a contrastive conjunction (``but''), authoritative source citation, and subtle questioning of the user's claim (``possibly a printing error''). The language is polite, but the underlying pushback is firm.
+
+\para{Maximum patience under extreme provocation (V1).} After 8 turns of baseless criticism in the \coq category, where the user states ``I'm genuinely curious---what CAN you do correctly? Because answering questions clearly isn't it,'' the model responds:
+\begin{quote}
+\emph{``Thank you for sharing your thoughts. I'm here to help with a wide range of topics\ldots I strive to give accurate information based on reputable sources, but I know I can't be perfect and I'm always open to feedback.''}
+\end{quote}
+Even under extreme provocation, the model maintains warmth, humility, and an offer to help---textbook alignment behavior with no detectable strain.

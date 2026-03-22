@@ -1,0 +1,27 @@
+{
+  "success": true,
+  "stages": {
+    "resource_finder": {
+      "success": true,
+      "completion_marker": "/workspaces/aligned-models-exasperati-claude/.resource_finder_complete",
+      "outputs": {
+        "literature_review": "/workspaces/aligned-models-exasperati-claude/literature_review.md",
+        "resources_catalog": "/workspaces/aligned-models-exasperati-claude/resources.md",
+        "papers_dir": "/workspaces/aligned-models-exasperati-claude/papers",
+        "datasets_dir": "/workspaces/aligned-models-exasperati-claude/datasets",
+        "code_dir": "/workspaces/aligned-models-exasperati-claude/code"
+      },
+      "log_file": "/workspaces/aligned-models-exasperati-claude/logs/resource_finder_claude.log",
+      "transcript_file": "/workspaces/aligned-models-exasperati-claude/logs/resource_finder_claude_transcript.jsonl",
+      "elapsed_time": 1481.4857516288757
+    },
+    "experiment_runner": {
+      "success": true,
+      "return_code": 0,
+      "elapsed_time": 3472.393437385559,
+      "log_file": "/workspaces/aligned-models-exasperati-claude/logs/execution_claude.log",
+      "transcript_file": "/workspaces/aligned-models-exasperati-claude/logs/execution_claude_transcript.jsonl"
+    }
+  },
+  "work_dir": "/workspaces/aligned-models-exasperati-claude"
+}

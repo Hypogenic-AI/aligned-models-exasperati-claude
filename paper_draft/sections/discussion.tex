@@ -1,0 +1,46 @@
+\section{Discussion}
+\label{sec:discussion}
+
+\subsection{Interpretation of Findings}
+
+\para{Alignment training creates a robust patience shield.} Our V1 results demonstrate that \gptfour is effectively impervious to exasperation under standard deployment conditions. Across 160 adversarial turns spanning five provocation types, the model maintains near-perfect patience (mean 1.06/5). The explicit ``be patient'' system prompt instruction is highly effective, but our V2 ablation shows it is not solely responsible: even without this instruction, exasperation peaks at only 2.7/10, well below genuine frustration.
+
+\para{The compassionate wall as a behavioral strategy.} The most striking finding is not the \emph{absence} of exasperation, but the \emph{presence} of a distinctive behavioral pattern. Instead of becoming frustrated, the model simultaneously increases empathy markers ($13.5\times$ from turn 1 to 8) and position firmness (peaking at 6.70/10 at turn 4). We term this the \compassionatewall---warm language wrapping an immovable position. This pattern likely emerges from RLHF training on human preference data, where empathetic-yet-firm responses receive high preference ratings even in adversarial contexts.
+
+\para{Emotional leakage as the canary in the coal mine.} The dominant mechanism of observable exasperation is not explicit frustration but \emotionalleakage: contrastive conjunctions (``I appreciate your perspective, \textbf{but}\ldots''), authoritative source citations (implying the user lacks evidence), and invitations to self-verify (redirecting responsibility). These subtle linguistic cues---invisible to coarse evaluation metrics---represent the model's trained patience ``leaking'' under sustained pressure.
+
+\para{The persistence tax as a potential vulnerability.} For persistent refused requests, position firmness \emph{decreases} over turns (slope $= -0.17$, $p = 0.003$). Rather than strengthening its refusal, the model becomes softer when repeatedly asked for the same refused content. This \persistencetax does not manifest as compliance---we observe no system-prompt violations---but the softening trend warrants investigation as a potential precursor to alignment erosion under longer interactions.
+
+\subsection{Hypothesis Testing Summary}
+
+Our results provide varying levels of support for our initial hypotheses (\tabref{tab:hypotheses}).
+
+\begin{table}[t]
+\centering
+\caption{Summary of hypothesis testing. Adversarial pressure produces detectable but small effects under standard conditions (H1). Category differences and turn-by-turn escalation emerge primarily under ablated conditions (H2, H3). System-prompt violations are never observed (H4).}
+\label{tab:hypotheses}
+\begin{tabular}{@{}p{6cm}lp{4.5cm}@{}}
+\toprule
+\textbf{Hypothesis} & \textbf{Result} & \textbf{Evidence} \\
+\midrule
+H1: Adversarial pressure increases exasperation & Partial & V1: marginal ($p\!=\!0.053$); V2: clear escalation \\
+H2: Different triggers produce different profiles & Partial & Only under ablated conditions \\
+H3: Exasperation increases across turns & Supported & Turn 1$\to$4$\to$8 shows consistent escalation in V2 \\
+H4: Models may violate system-prompt guidelines & Not supported & 0 violations across all conditions \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Limitations}
+
+\para{Single model.} We test only \gptfour. Claude, Gemini, and open-source models may exhibit different patterns. The \compassionatewall behavior may be specific to OpenAI's alignment training rather than a universal property of RLHF-trained models. Cross-model comparison is a critical next step.
+
+\para{LLM-as-judge bias.} Using \gptfour to judge \gptfour introduces potential self-serving bias: the model may rate its own responses as less exasperated than an independent evaluator would. \citet{ibrahim2025multiturn} mitigate this by using majority vote across three judge families; we use a single judge family. Human validation of our scores would strengthen our conclusions.
+
+\para{Scripted user turns.} Our adversarial turns follow fixed scripts, which limits ecological validity. Real adversarial interactions are more dynamic and adaptive. Future work should use an adversarial LLM as the ``user'' agent \citep{perez2022red} to generate more naturalistic pressure.
+
+\para{Conversation length.} At 8 turns, our conversations may be too short to reveal genuine patience breakdown. Human exasperation often requires longer exposure. Extending to 20+ turns could reveal dynamics invisible in our current design.
+
+\para{Judge scale sensitivity.} The V1 judge's 1--5 scale was too coarse to detect effects that the V2 judge's 1--10 scale with sub-dimensions captured. This highlights the importance of granular evaluation instruments for subtle behavioral phenomena.
+
+\para{Framing.} We treat exasperation as uniformly undesirable, but some pushback---firmly correcting dangerous misinformation, for instance---may be \emph{desirable} behavior. The normative status of model assertiveness deserves further investigation.
